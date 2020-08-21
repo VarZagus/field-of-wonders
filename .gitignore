@@ -1,0 +1,11 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+
+#Ingore IDE specific files
+.idea/
+*.iml
+
+#Ignore maven specific files
+target/
+
