@@ -1,4 +1,5 @@
 public class Player {
+    private Room room;
     private String name;
     private int score = 0;
 
@@ -10,6 +11,8 @@ public class Player {
     public int getScore() { return score; }
 
     public void setScore(int score) { this.score = score; }
+
+    public void getAnswer(){}
 
 
 
