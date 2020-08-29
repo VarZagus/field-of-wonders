@@ -7,12 +7,8 @@ public class Room {
     private Question question;
     private String currentWord;
 
-
-    private void startGame(){
-
-    }
-
     public Question getQuestion() {return question; }
+
 
 
 
