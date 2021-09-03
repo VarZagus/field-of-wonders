@@ -3,10 +3,14 @@ package server;
 public class Player {
     private Room room;
     private User user;
-    private int score = 0;
+    private int score;
 
 
-    public Player(User user, Room room) {}
+    public Player(User user, Room room) {
+        this.room = room;
+        this.user = user;
+        score = 0;
+    }
 
     public int getScore() { return score; }
 
