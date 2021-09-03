@@ -1,5 +1,3 @@
-package server;
-
 public class RoomHost implements Host {
     private User user;
     private Room room;

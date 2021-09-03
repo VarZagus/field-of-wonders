@@ -1,10 +1,9 @@
-package server;
-
 import java.util.ArrayList;
 import java.util.Random;
 
 
 public class Room {
+    private String name;
     private ArrayList<Player> players;
     private Question question;
     private String currentWord;

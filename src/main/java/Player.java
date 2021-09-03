@@ -1,5 +1,3 @@
-package server;
-
 public class Player {
     private Room room;
     private User user;
