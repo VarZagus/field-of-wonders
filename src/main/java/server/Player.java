@@ -1,12 +1,12 @@
+package server;
+
 public class Player {
     private Room room;
-    private String name;
+    private User user;
     private int score = 0;
 
 
-    public Player(String name) { this.name = name; }
-
-    public String getName() { return name; }
+    public Player(User user, Room room) {}
 
     public int getScore() { return score; }
 

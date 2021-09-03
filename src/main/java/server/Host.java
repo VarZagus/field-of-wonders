@@ -1,4 +1,9 @@
-public interface Hosteable {
+package server;
+
+/**
+ * Тот, кто создаёт лобби (Room).
+ */
+public interface Host {
     void setQuestion(Question question);
     void startGame();
     void pauseGame();
