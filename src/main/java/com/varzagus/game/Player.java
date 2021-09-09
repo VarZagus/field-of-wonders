@@ -1,3 +1,7 @@
+package com.varzagus.game;
+
+import com.varzagus.domain.User;
+
 public class Player {
     private Room room;
     private User user;
@@ -15,8 +19,4 @@ public class Player {
     public void setScore(int score) { this.score = score; }
 
     public void getAnswer(){}
-
-
-
-
 }

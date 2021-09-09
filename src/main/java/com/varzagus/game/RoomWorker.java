@@ -1,19 +1,19 @@
-public class RoomHost implements Host {
-    private User user;
+package com.varzagus.game;
+
+import com.varzagus.api.Host;
+import com.varzagus.domain.Question;
+import com.varzagus.domain.User;
+
+public class RoomWorker implements Host {
     private Room room;
 
-
-    public User getUser() {
-        return user;
-    }
 
     public Room getRoom() {
         return room;
     }
 
-    public RoomHost(User user, Room room){
+    public RoomWorker(User user, Room room){
         this.room = room;
-        this.user = user;
     }
 
     @Override
@@ -36,8 +36,11 @@ public class RoomHost implements Host {
 
     }
 
+
     @Override
     public void kickPlayer(Player player) {
 
     }
+
+
 }

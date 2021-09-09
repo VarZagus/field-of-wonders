@@ -1,15 +1,25 @@
+package com.varzagus.game;
+
+import com.varzagus.api.Host;
+import com.varzagus.domain.Question;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 
 public class Room {
     private String name;
-    private ArrayList<Player> players;
+    private List<Player> players;
     private Question question;
-    private String currentWord;
+    private Board board;
     private Host host;
 
     public Question getQuestion() {return question; }
+
+    public Room(){
+        players = new ArrayList<>();
+    }
 
 
 

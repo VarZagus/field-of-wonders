@@ -1,3 +1,5 @@
+package com.varzagus.domain;
+
 public class User {
     private String login;
     private String password;
