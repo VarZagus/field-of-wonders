@@ -1,46 +1,41 @@
 package com.varzagus.game;
 
-import com.varzagus.api.Host;
-import com.varzagus.domain.Question;
 import com.varzagus.domain.User;
 
-public class RoomWorker implements Host {
-    private Room room;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Queue;
 
+/**
+ * Класс, который получает пользователей,
+ * которые ищут игру и при необходиомом кол-ве создаёт новую комнату.
+ * Пока представлен прототип, который не учитывает что пользователь может выйти из очереди.
+ */
+public class RoomWorker  {
+    private List<Room> rooms;
+    private Queue<User> usersQueue;
 
-    public Room getRoom() {
+    public Room createRoom(){
+        Room room = null;
+        if(usersQueue.size() >= 4){
+            List<User> users = new ArrayList<>();
+            int count = 0;
+            while(count != 4){
+                User user = usersQueue.poll();
+                users.add(user);
+                count++;
+            }
+            room = new Room(users);
+            rooms.add(room);
+        }
         return room;
     }
 
-    public RoomWorker(User user, Room room){
-        this.room = room;
+    public List<Room> getRooms(){
+        return rooms;
     }
 
-    @Override
-    public void setQuestion(Question question) {
-
+    public Queue<User> userQueue(){
+        return usersQueue;
     }
-
-    @Override
-    public void startGame() {
-
-    }
-
-    @Override
-    public void pauseGame() {
-
-    }
-
-    @Override
-    public void stopGame() {
-
-    }
-
-
-    @Override
-    public void kickPlayer(Player player) {
-
-    }
-
-
 }

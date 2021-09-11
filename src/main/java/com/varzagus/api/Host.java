@@ -1,15 +1,15 @@
 package com.varzagus.api;
 
+import com.varzagus.domain.User;
 import com.varzagus.game.Player;
 import com.varzagus.domain.Question;
 
+import java.util.List;
+
 
 public interface Host {
-    void setQuestion(Question question);
-    void startGame();
-    void pauseGame();
-    void stopGame();
-    void kickPlayer(Player player);
 
+    void startNewRound();
+    List<User> getUserList();
 
 }

@@ -3,14 +3,14 @@ package com.varzagus.game;
 import com.varzagus.domain.User;
 
 public class Player {
-    private Room room;
     private User user;
     private int score;
+    private Round round;
 
 
-    public Player(User user, Room room) {
-        this.room = room;
+    public Player(User user, Round round) {
         this.user = user;
+        this.round = round;
         score = 0;
     }
 
