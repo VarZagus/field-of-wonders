@@ -3,6 +3,7 @@ package com.varzagus.game;
 import com.varzagus.domain.Question;
 import com.varzagus.domain.User;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -11,16 +12,59 @@ import java.util.Random;
  * В этом классе описывается сам процесс игры
  */
 public class Round {
+
     private Question question;
     private List<Player> playerList;
     private boolean isFinished = false;
     private Board board;
+    private int currentDrumPosition = 0;
+    //какой игрок сейчас ходит
+    private int currentPlayer=0;
 
     public Round(Question question, List<User> userList){
         this.question = question;
         userList.forEach(user -> playerList.add(new Player(user, this)));
         board = new Board(question.getAnswer());
     }
+    //переключение на следующего игрока
+    public void nextPlayer(){
+        if(currentPlayer < playerList.size()-1) currentPlayer++;
+        else currentPlayer = 0;
+    }
+
+
+    public void move(Player moverPlayer, char playerAnswer){
+        board.checkAnswer(playerAnswer);
+        //доделать
+
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public List<Player> getPlayerList() {
+        return playerList;
+    }
+
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(boolean finished) {
+        isFinished = finished;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+
 
 
     public static class Drum {

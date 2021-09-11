@@ -35,6 +35,10 @@ public class RoomWorker  {
         return rooms;
     }
 
+    public void addUser(User user){
+        usersQueue.add(user);
+    }
+
     public Queue<User> userQueue(){
         return usersQueue;
     }

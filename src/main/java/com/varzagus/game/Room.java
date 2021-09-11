@@ -19,6 +19,26 @@ public class Room implements Host {
     private List<User> userList;
     private List<Round> rounds;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+    }
+
+    public List<Round> getRounds() {
+        return rounds;
+    }
+
+    public void setRounds(List<Round> rounds) {
+        this.rounds = rounds;
+    }
+
     public Room(List<User> userList){
         this.userList = userList;
     }
