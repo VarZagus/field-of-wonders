@@ -3,6 +3,7 @@ package com.varzagus.application;
 import com.varzagus.domain.User;
 import com.varzagus.game.Room;
 import com.varzagus.game.RoomWorker;
+import com.varzagus.game.Round;
 
 public class Application {
     public static void main(String[] args) {
@@ -17,6 +18,18 @@ public class Application {
         roomWorker.addUser(user4);
         Room room = roomWorker.createRoom();
         room.startNewRound();
+        Round current = room.getCurrentRound();
+        current.playerRoll(current.getCurrentPlayer());
+        System.out.println("Текущее состояние барабана:" + current.getCurrentDrumPosition());
+        if(current.getCurrentDrumPosition() != 7 && current.getCurrentDrumPosition() != 8){
+            if(current.move('f')){
+                System.out.println("это правильная буква!");
+                if(current.isFinished()){
+                    System.out.println("Раунд закончился!!!!!");
+                }
+
+            }
+        }
 
 
     }

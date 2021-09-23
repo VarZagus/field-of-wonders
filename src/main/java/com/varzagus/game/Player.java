@@ -3,10 +3,10 @@ package com.varzagus.game;
 import com.varzagus.domain.User;
 
 public class Player {
-    private User user;
+
     private int score;
     private Round round;
-
+    private User user;
 
     public Player(User user, Round round) {
         this.user = user;
@@ -14,9 +14,19 @@ public class Player {
         score = 0;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public Round getRound() {
+        return round;
+    }
+
+
+
+
     public int getScore() { return score; }
 
     public void setScore(int score) { this.score = score; }
 
-    public void getAnswer(){}
 }
