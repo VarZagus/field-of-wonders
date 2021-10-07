@@ -1,0 +1,15 @@
+package com.varzagus.enums;
+
+public enum DrumPosition {
+    X2,
+    X4,
+    SECTOR_PLUS,
+    BANKRUPT,
+    SECTOR_NULL,
+    FIVE_POINTS,
+    TEN_POINTS,
+    FIVE_TEEN_POINTS,
+    TWENTY_POINTS,
+    TWENTY_FIVE_POINTS
+
+}
