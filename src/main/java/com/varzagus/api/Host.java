@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface Host {
 
-    void startNewRound();
+    void startNewRound(Question question);
     List<User> getUserList();
 
 }

@@ -22,6 +22,10 @@ public class Player {
         return round;
     }
 
+    public String getName(){
+        return user.getLogin();
+    }
+
 
 
 

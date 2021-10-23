@@ -1,8 +1,10 @@
 package com.varzagus.game;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Board {
@@ -38,18 +40,30 @@ public class Board {
 
     }
 
+    public void openChar(int pos){
+        openedChars[pos] = true;
+    }
+
+    public void openAllChars() {
+        for(int i = 0; i < openedChars.length; i++){
+            openedChars[i] = true;
+        }
+    }
+
     //возвращаем текующее состоянее доски
-    public char[] getCurrentBoard(){
-        char[] currBoard = new char[word.length()];
-        for(int i = 0; i < currBoard.length; i++){
-            if(openedChars[i]) currBoard[i] = word.charAt(i);
-            else currBoard[i] = '*';
+    public List<Character> getCurrentBoard(){
+        List<Character> currBoard = new ArrayList<>();
+        for(int i = 0; i < openedChars.length; i++){
+            if(openedChars[i]) currBoard.add(word.charAt(i));
+            else currBoard.add('*');
         }
         return currBoard;
     }
 
     public boolean isFull(){
-        if(Arrays.asList(openedChars).contains(false)) return false;
+        for(int i = 0; i < openedChars.length; i++){
+            if(openedChars[i] == false) return false;
+        }
         return true;
     }
 

@@ -45,7 +45,7 @@ public class RoomWorker  {
         usersQueue.add(user);
     }
 
-    public Queue<User> userQueue(){
+    public Queue<User> getUserQueue(){
         return usersQueue;
     }
 }

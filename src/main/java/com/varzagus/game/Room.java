@@ -50,8 +50,8 @@ public class Room implements Host {
         rounds = new ArrayList<>();
     }
 
-    public void startNewRound(){
-        Round round = new Round(new Question("s", "f"), userList);
+    public void startNewRound(Question question){
+        Round round = new Round(question, userList);
         rounds.add(round);
         currentRound = round;
     }

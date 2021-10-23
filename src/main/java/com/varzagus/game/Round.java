@@ -1,6 +1,5 @@
 package com.varzagus.game;
 
-import com.varzagus.api.Rollable;
 import com.varzagus.domain.Question;
 import com.varzagus.domain.User;
 import com.varzagus.enums.DrumPosition;
@@ -16,10 +15,11 @@ public class Round {
     private List<Player> playerList;
     private boolean isFinished = false;
     private Board board;
-    private Rollable drum = new Drum();
+    private Drum drum = new Drum();
     private DrumPosition currentDrumPosition;
+    private Player winner;
     //какой игрок сейчас ходит
-    private int currentPlayer=0;
+    private int currentPlayer;
 
 
     public Round(Question question, List<User> userList){
@@ -35,18 +35,30 @@ public class Round {
         else currentPlayer = 0;
     }
 
-    public DrumPosition getCurrentDrumPosition() {
-        return currentDrumPosition;
+
+    public void currentPlayerRoll(){
+       currentDrumPosition = drum.rollDrum(playerList.get(currentPlayer));
+       currentDrumPosition.actionWithPlayer(playerList.get(currentPlayer));
     }
 
-    public void playerRoll(Player rollerPlayer){
-       currentDrumPosition = drum.rollDrum(rollerPlayer);
+    public void deletePlayer(Player player) {
+        playerList.remove(playerList.indexOf(player));
     }
 
     public boolean playerMove(char playerAnswer){
         boolean res = board.checkAnswer(playerAnswer);
         if(board.isFull()) isFinished = true;
         return res;
+    }
+
+    public void finish() {
+        isFinished = true;
+        winner = playerList.stream().max(Comparator.comparingInt(Player::getScore)).get();
+    }
+
+    public Player getWinner(){
+        return playerList.get(currentPlayer);
+
     }
 
     public Question getQuestion() {
@@ -58,12 +70,12 @@ public class Round {
     }
 
 
-    public boolean isFinished() {
-        return isFinished;
+    public DrumPosition getCurrentDrumPosition() {
+        return currentDrumPosition;
     }
 
-    public void setFinished(boolean finished) {
-        isFinished = finished;
+    public boolean isFinished() {
+        return isFinished;
     }
 
     public Board getBoard() {
