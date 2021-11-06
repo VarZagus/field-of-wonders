@@ -45,7 +45,7 @@ public enum DrumPosition {
             player.setScore(player.getScore()+10);
         }
     },
-    FIVE_TEEN_POINTS {
+    FIFTEEN_POINTS {
         @Override
         public void actionWithPlayer(Player player) {
             player.setScore(player.getScore() + 15);

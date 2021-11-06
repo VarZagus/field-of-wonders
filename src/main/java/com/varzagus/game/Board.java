@@ -27,10 +27,10 @@ public class Board {
         if(!usedChars.contains(answer)){
             usedChars.add(answer);
             if(word.contains(Character.toString(answer) )){
-                for(int i = word.indexOf(answer); i <= word.lastIndexOf(answer); i++){
-                    if(word.charAt(i) == answer){
-                        openedChars[i] = true;
-                    }
+                int currPos = word.indexOf(answer);
+                while(currPos != -1) {
+                    openedChars[currPos] = true;
+                    currPos = word.indexOf(answer, currPos+1);
                 }
                 return true;
             }

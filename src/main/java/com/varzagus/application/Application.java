@@ -49,6 +49,9 @@ public class Application {
                 System.out.println("Вопрос: " + question);
                 System.out.println("Доска: " + round.getBoard().getCurrentBoard());
                 while(!room.getCurrentRound().isFinished()){
+                    if(round.getPlayerList().size() == 1) {
+                        System.out.println("Побеждает игрок " );
+                    }
                     System.out.println("Ход игрока: " + round.getCurrentPlayer().getName());
                     System.out.println("Вращение барабана...");
                     room.getCurrentRound().currentPlayerRoll();
@@ -66,40 +69,45 @@ public class Application {
                     }
                     if(drumPosition.equals(DrumPosition.SECTOR_PLUS)){
                         System.out.println("Выберите позицию от 0 до " + (round.getBoard().getCurrentBoard().size()-1));
-                        int pos = Integer.valueOf(in.nextLine());
+                        int pos = Integer.parseInt(in.nextLine());
                         while(pos < 0 || pos >= round.getBoard().getCurrentBoard().size() || !round.getBoard().getCurrentBoard().get(pos).equals('*')){
                             System.out.println("Неккоректная позиция");
                             pos = in.nextInt();
                         }
+                        in.nextLine();
                         round.getBoard().openChar(pos);
                         System.out.println("Доска: " + round.getBoard().getCurrentBoard());
                     }
                     else {
-                        System.out.println("Угадывайте букву или слово? W/C?");
+                        System.out.println("Введите букву: ");
                         char ans = in.nextLine().toLowerCase(Locale.ROOT).charAt(0);
-                        if(ans == 'w'){
-                            System.out.println("Введите слово: ");
-                            String word = in.nextLine();
-                            if(word.equals(round.getQuestion().getAnswer())){
-                                System.out.println("Поздравляем! Вы угалади слово!");
-                                round.getBoard().openAllChars();
+                        if (round.getBoard().checkAnswer(ans)) {
+                            System.out.println("Есть такая буква! Откройте букву " + ans + "!");
+                            System.out.println("Доска: " + round.getBoard().getCurrentBoard());
+                            System.out.println("Делаете следующий ход или угадываете слово? n/w?");
+                            ans = in.nextLine().toLowerCase(Locale.ROOT).charAt(0);
+                            if (ans == 'n') {
+                                continue;
                             }
                             else {
-                                //В принуипе как-то так можно будет обрабатывать если игрок выйдет из сети
-                                System.out.println("К сожалению это неправильное слово! Вы больше не учавствуете в раунде!");
-                                round.deletePlayer(round.getCurrentPlayer());
-                                continue;
+                                System.out.println("Введите слово: ");
+                                String word = in.nextLine();
+                                if(word.equals(round.getQuestion().getAnswer())){
+                                    System.out.println("Поздравляем! Вы угалади слово!");
+                                    round.getBoard().openAllChars();
+                                }
+                                else {
+                                    //В принуипе как-то так можно будет обрабатывать если игрок выйдет из сети
+                                    System.out.println("К сожалению это неправильное слово! Вы больше не учавствуете в раунде!");
+                                    round.deletePlayer(round.getCurrentPlayer());
+                                    continue;
+                                }
                             }
                         }
                         else {
-                            System.out.println("Введите букву: ");
-                            ans = in.nextLine().charAt(0);
-                            if(round.getBoard().checkAnswer(ans)){
-                                System.out.println("Есть такая буква! Откройте букву " + ans + "!");
-                                System.out.println("Доска: " + round.getBoard().getCurrentBoard());
-                            }
-                            else System.out.println("Такой буквы нет!");
+                            System.out.println("Такой буквы нет!");
                         }
+
                     }
                     if(round.getBoard().isFull()){
                         System.out.println("Раунд окончен! Ответ:" + round.getQuestion().getAnswer());

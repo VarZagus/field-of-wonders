@@ -43,6 +43,9 @@ public class Round {
 
     public void deletePlayer(Player player) {
         playerList.remove(playerList.indexOf(player));
+        if(currentPlayer >= playerList.size()) {
+            currentPlayer = 0;
+        }
     }
 
     public boolean playerMove(char playerAnswer){
@@ -83,6 +86,7 @@ public class Round {
     }
 
     public Player getCurrentPlayer() {
+
         return playerList.get(currentPlayer);
     }
 

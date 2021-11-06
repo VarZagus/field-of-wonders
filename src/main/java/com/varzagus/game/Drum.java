@@ -53,7 +53,7 @@ public class Drum {
             return DrumPosition.TEN_POINTS;
         }
         if(act == 12 || act == 13){
-            return DrumPosition.FIVE_TEEN_POINTS;
+            return DrumPosition.FIFTEEN_POINTS;
         }
         if(act == 14 || act == 15) {
             return DrumPosition.TWENTY_POINTS;
