@@ -1,8 +1,6 @@
 package com.varzagus.game;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -62,7 +60,7 @@ public class Board {
 
     public boolean isFull(){
         for(int i = 0; i < openedChars.length; i++){
-            if(openedChars[i] == false) return false;
+            if(!openedChars[i]) return false;
         }
         return true;
     }

@@ -6,15 +6,21 @@ import com.varzagus.enums.DrumPosition;
 import com.varzagus.game.Room;
 import com.varzagus.game.RoomWorker;
 import com.varzagus.game.Round;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
 public class Application {
+
+    private static final Logger logger = LoggerFactory.getLogger(Application.class);
+
     public static void main(String[] args) {
+
+        logger.info("Тестируем логгер");
 
         Scanner in = new Scanner(System.in);
         System.out.println("Добавляем пользователей...");

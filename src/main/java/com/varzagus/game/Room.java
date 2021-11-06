@@ -6,7 +6,6 @@ import com.varzagus.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Это класс, который управляет самой игрой. Он  хранит в себе
