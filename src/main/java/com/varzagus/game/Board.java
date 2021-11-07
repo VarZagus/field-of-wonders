@@ -1,8 +1,7 @@
 package com.varzagus.game;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 public class Board {
@@ -15,7 +14,7 @@ public class Board {
     }
 
     public Board(String word){
-        this.word = word;
+        this.word = word.toLowerCase(Locale.ROOT);
         usedChars = new HashSet<>();
         openedChars = new boolean[word.length()];
     }
@@ -24,10 +23,10 @@ public class Board {
     public boolean checkAnswer(char answer){
         if(!usedChars.contains(answer)){
             usedChars.add(answer);
-            if(word.contains(Character.toString(answer) )){
+            if(word.contains(Character.toString(answer).toLowerCase(Locale.ROOT) )){
                 int currPos = word.indexOf(answer);
                 while(currPos != -1) {
-                    openedChars[currPos] = true;
+                    openChar(currPos);
                     currPos = word.indexOf(answer, currPos+1);
                 }
                 return true;
@@ -38,7 +37,7 @@ public class Board {
 
     }
 
-    public void openChar(int pos){
+    private void openChar(int pos){
         openedChars[pos] = true;
     }
 
@@ -49,13 +48,13 @@ public class Board {
     }
 
     //возвращаем текующее состоянее доски
-    public List<Character> getCurrentBoard(){
-        List<Character> currBoard = new ArrayList<>();
+    public String getCurrentBoard(){
+        char[] currBoard = new char[openedChars.length];
         for(int i = 0; i < openedChars.length; i++){
-            if(openedChars[i]) currBoard.add(word.charAt(i));
-            else currBoard.add('*');
+            if(openedChars[i]) currBoard[i] = word.charAt(i);
+            else currBoard[i] = '*';
         }
-        return currBoard;
+        return new String(currBoard);
     }
 
     public boolean isFull(){

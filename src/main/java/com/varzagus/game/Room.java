@@ -60,5 +60,14 @@ public class Room implements Host {
         return userList;
     }
 
+    /**
+     * Удаление пользователя из комнаты и текущего раунда
+     * @param user
+     */
+    public void deleteUser(User user) {
+        userList.remove(user);
+        currentRound.deleteByUser(user);
+    }
+
 
 }

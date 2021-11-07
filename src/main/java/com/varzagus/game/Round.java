@@ -36,9 +36,9 @@ public class Round {
     }
 
 
-    public void currentPlayerRoll(){
-       currentDrumPosition = drum.rollDrum(playerList.get(currentPlayer));
-       currentDrumPosition.actionWithPlayer(playerList.get(currentPlayer));
+    public DrumPosition rollDrum(){
+       currentDrumPosition = drum.rollDrum();
+       return currentDrumPosition;
     }
 
     public void deletePlayer(Player player) {
@@ -48,15 +48,24 @@ public class Round {
         }
     }
 
+    public void deleteByUser(User user) {
+        Player player = playerList.stream().filter(p -> p.getUser() == user).findFirst().orElse(null);
+        if(player != null) {
+            deletePlayer(player);
+        }
+    }
+
     public boolean playerMove(char playerAnswer){
         boolean res = board.checkAnswer(playerAnswer);
         if(board.isFull()) isFinished = true;
         return res;
     }
 
+
+
     public void finish() {
         isFinished = true;
-        winner = playerList.stream().max(Comparator.comparingInt(Player::getScore)).get();
+        winner = getCurrentPlayer();
     }
 
     public Player getWinner(){
@@ -86,7 +95,9 @@ public class Round {
     }
 
     public Player getCurrentPlayer() {
-
+        if(currentPlayer >= playerList.size()) {
+            currentPlayer = 0;
+        }
         return playerList.get(currentPlayer);
     }
 

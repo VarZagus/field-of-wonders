@@ -29,7 +29,7 @@ public class Drum {
      * @return значение, на котором остановился барабан.
      */
 
-    public DrumPosition rollDrum(Player player) {
+    public DrumPosition rollDrum() {
         int act = random.nextInt(16) + 1;
         if(act == 1) {
             return DrumPosition.X2;
