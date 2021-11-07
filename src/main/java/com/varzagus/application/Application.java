@@ -37,9 +37,16 @@ public class Application {
                System.out.println("Ход игрока " + gameWorker.getCurrentPlayer().getName());
                gameWorker.rollDrum();
                if(!gameWorker.canPlayerAnswering()) {
-                   if(!gameWorker.wasPlayerDeleted()) {
-                       gameWorker.nextStep();
-                   }
+                   continue;
+               }
+               if(gameWorker.getDrumPosition() == DrumPosition.SECTOR_PLUS) {
+                   System.out.print("Введите одну из позиций на барабане: ");
+                   gameWorker.getUnopenedPositions().forEach(pos -> System.out.print(pos + " "));
+                   System.out.println();
+                   int position = in.nextInt();
+                   in.nextLine();
+                   gameWorker.playerAnswer(position);
+                   gameWorker.nextStep();
                    continue;
                }
                System.out.println("Введите букву:");

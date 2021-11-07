@@ -6,6 +6,8 @@ import com.varzagus.enums.DrumPosition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -87,20 +89,8 @@ public class GameWorker {
         logger.info(String.format("Игроку %s выпало: %s",
                 currentRound.getCurrentPlayer().getName(),
                 currentRound.getCurrentDrumPosition()));
-        if(drumPosition == DrumPosition.BANKRUPT) {
-            currentRound.deletePlayer(getCurrentPlayer());
-        }
-        else {
-            doActionWithPlayer();
-        }
-        return drumPosition;
-    }
 
-    /**
-     * Здесь производятся манипуляции с очками игрока
-     */
-    private void doActionWithPlayer() {
-        drumPosition.actionWithPlayer(currentRound.getCurrentPlayer());
+        return drumPosition;
     }
 
     /**
@@ -138,6 +128,13 @@ public class GameWorker {
         logger.info(String.format("Игрок %s не угадал букву", currentRound.getCurrentPlayer().getName()));
         isCorrectCurrentAnswer = false;
         return false;
+    }
+
+    public void playerAnswer(int answer) {
+        currentRound.getBoard().openChar(answer);
+        if(currentRound.getBoard().isFull()) {
+            currentRound.finish();
+        }
     }
 
     public String getBoard() {
@@ -180,6 +177,17 @@ public class GameWorker {
     }
     public Player getCurrentPlayer() {
         return currentRound.getCurrentPlayer();
+    }
+
+    public List<Integer> getUnopenedPositions() {
+        List<Integer> positions = new ArrayList<>();
+        String board = getBoard();
+        int currIndex = board.indexOf('*');
+        while(currIndex != -1) {
+            positions.add(currIndex);
+            currIndex = board.indexOf('*', currIndex + 1);
+        }
+        return positions;
     }
 
 

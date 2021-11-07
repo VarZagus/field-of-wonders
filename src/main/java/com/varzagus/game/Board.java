@@ -37,7 +37,7 @@ public class Board {
 
     }
 
-    private void openChar(int pos){
+    public void openChar(int pos){
         openedChars[pos] = true;
     }
 
@@ -63,5 +63,6 @@ public class Board {
         }
         return true;
     }
+
 
 }

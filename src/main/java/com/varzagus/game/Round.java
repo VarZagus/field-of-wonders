@@ -37,7 +37,7 @@ public class Round {
 
 
     public DrumPosition rollDrum(){
-       currentDrumPosition = drum.rollDrum();
+       currentDrumPosition = drum.rollDrum(getCurrentPlayer());
        return currentDrumPosition;
     }
 
