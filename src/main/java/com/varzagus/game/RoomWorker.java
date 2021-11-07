@@ -13,8 +13,8 @@ import java.util.Queue;
  * Пока представлен прототип, который не учитывает что пользователь может выйти из очереди.
  */
 public class RoomWorker  {
-    private List<Room> rooms;
-    private Queue<User> usersQueue;
+    private final List<Room> rooms;
+    private final Queue<User> usersQueue;
 
     public RoomWorker(){
         rooms = new ArrayList<>();

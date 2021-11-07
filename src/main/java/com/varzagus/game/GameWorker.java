@@ -1,5 +1,6 @@
 package com.varzagus.game;
 
+import com.varzagus.application.Application;
 import com.varzagus.domain.Question;
 import com.varzagus.domain.User;
 import com.varzagus.enums.DrumPosition;
@@ -59,7 +60,7 @@ public class GameWorker {
     }
 
     public void start() {
-        logger.info(String.format("Ход игрока: %s",currentRound.getCurrentPlayer().getName()));
+        Application.printLoggerInfo(String.format("Ход игрока: %s",currentRound.getCurrentPlayer().getName()));
     }
 
     /**
@@ -75,7 +76,7 @@ public class GameWorker {
             if(!isCorrectCurrentAnswer) {
                 currentRound.nextPlayer();
             }
-            logger.info(String.format("Ход игрока: %s",currentRound.getCurrentPlayer().getName()));
+            Application.printLoggerInfo(String.format("Ход игрока: %s",currentRound.getCurrentPlayer().getName()));
         }
 
     }
@@ -86,7 +87,7 @@ public class GameWorker {
      */
     public DrumPosition rollDrum() {
         drumPosition = currentRound.rollDrum();
-        logger.info(String.format("Игроку %s выпало: %s",
+        Application.printLoggerInfo(String.format("Игроку %s выпало: %s",
                 currentRound.getCurrentPlayer().getName(),
                 currentRound.getCurrentDrumPosition()));
 
@@ -100,11 +101,11 @@ public class GameWorker {
      */
     public boolean playerAnswer(String answer) {
         if(answer.toLowerCase(Locale.ROOT).equals(currentRound.getQuestion().getAnswer().toLowerCase(Locale.ROOT))) {
-            logger.info(String.format("Игрок %s угалад слово и становится победителем",currentRound.getCurrentPlayer().getName()));
+            Application.printLoggerInfo(String.format("Игрок %s угалад слово и становится победителем",currentRound.getCurrentPlayer().getName()));
             currentRound.finish();
             return true;
         }
-        logger.info(String.format("Игрок %s не угадал слово и выбывает из игры", currentRound.getCurrentPlayer().getName()));
+        Application.printLoggerInfo(String.format("Игрок %s не угадал слово и выбывает из игры", currentRound.getCurrentPlayer().getName()));
         currentRound.deletePlayer(currentRound.getCurrentPlayer());
 
         return false;
@@ -118,14 +119,14 @@ public class GameWorker {
      */
     public boolean playerAnswer(char answer) {
         if(currentRound.getBoard().checkAnswer(answer)) {
-            logger.info(String.format("Игрок %s угадал букву", currentRound.getCurrentPlayer().getName()));
+            Application.printLoggerInfo(String.format("Игрок %s угадал букву", currentRound.getCurrentPlayer().getName()));
             isCorrectCurrentAnswer = true;
             if(currentRound.getBoard().isFull()) {
                 currentRound.finish();
             }
             return true;
         }
-        logger.info(String.format("Игрок %s не угадал букву", currentRound.getCurrentPlayer().getName()));
+        Application.printLoggerInfo(String.format("Игрок %s не угадал букву", currentRound.getCurrentPlayer().getName()));
         isCorrectCurrentAnswer = false;
         return false;
     }
