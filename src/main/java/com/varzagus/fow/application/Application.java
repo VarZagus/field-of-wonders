@@ -1,11 +1,11 @@
-package com.varzagus.application;
+package com.varzagus.fow.application;
 
-import com.varzagus.domain.Question;
-import com.varzagus.domain.User;
-import com.varzagus.enums.DrumPosition;
-import com.varzagus.game.GameWorker;
-import com.varzagus.game.Room;
-import com.varzagus.game.RoomWorker;
+import com.varzagus.fow.domain.Question;
+import com.varzagus.fow.domain.User;
+import com.varzagus.fow.enums.DrumPosition;
+import com.varzagus.fow.game.GameWorker;
+import com.varzagus.fow.game.Room;
+import com.varzagus.fow.game.RoomWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

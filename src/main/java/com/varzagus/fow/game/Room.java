@@ -1,8 +1,8 @@
-package com.varzagus.game;
+package com.varzagus.fow.game;
 
-import com.varzagus.api.Host;
-import com.varzagus.domain.Question;
-import com.varzagus.domain.User;
+import com.varzagus.fow.api.Host;
+import com.varzagus.fow.domain.Question;
+import com.varzagus.fow.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;

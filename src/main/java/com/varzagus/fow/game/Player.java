@@ -1,6 +1,6 @@
-package com.varzagus.game;
+package com.varzagus.fow.game;
 
-import com.varzagus.domain.User;
+import com.varzagus.fow.domain.User;
 
 public class Player {
 

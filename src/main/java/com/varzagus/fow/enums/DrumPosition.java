@@ -1,4 +1,4 @@
-package com.varzagus.enums;
+package com.varzagus.fow.enums;
 
 
 public enum DrumPosition {

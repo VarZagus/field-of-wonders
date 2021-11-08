@@ -1,4 +1,4 @@
-package com.varzagus.game;
+package com.varzagus.fow.game;
 
 import java.util.HashSet;
 import java.util.Locale;

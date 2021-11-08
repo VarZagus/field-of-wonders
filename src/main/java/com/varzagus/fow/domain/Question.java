@@ -1,4 +1,4 @@
-package com.varzagus.domain;
+package com.varzagus.fow.domain;
 
 public class Question {
     private final String question;

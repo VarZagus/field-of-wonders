@@ -1,9 +1,9 @@
-package com.varzagus.game;
+package com.varzagus.fow.game;
 
-import com.varzagus.application.Application;
-import com.varzagus.domain.Question;
-import com.varzagus.domain.User;
-import com.varzagus.enums.DrumPosition;
+import com.varzagus.fow.application.Application;
+import com.varzagus.fow.domain.Question;
+import com.varzagus.fow.domain.User;
+import com.varzagus.fow.enums.DrumPosition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

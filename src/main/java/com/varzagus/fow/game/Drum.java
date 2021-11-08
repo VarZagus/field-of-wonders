@@ -1,6 +1,6 @@
-package com.varzagus.game;
+package com.varzagus.fow.game;
 
-import com.varzagus.enums.DrumPosition;
+import com.varzagus.fow.enums.DrumPosition;
 
 import java.util.Random;
 
