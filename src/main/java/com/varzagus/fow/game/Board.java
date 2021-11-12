@@ -9,9 +9,6 @@ public class Board {
     private Set<Character> usedChars;
     private boolean[] openedChars;
 
-    public Set<Character> getUsedChars() {
-        return usedChars;
-    }
 
     public Board(String word){
         this.word = word.toLowerCase(Locale.ROOT);
@@ -35,6 +32,14 @@ public class Board {
         }
         return false;
 
+    }
+
+    public boolean checkAnswer(String answer) {
+        if(word.equals(answer)) {
+            openAllChars();
+            return true;
+        }
+        return false;
     }
 
     public void openChar(int pos){
@@ -62,6 +67,10 @@ public class Board {
             if(!openedChars[i]) return false;
         }
         return true;
+    }
+
+    public Set<Character> getUsedChars() {
+        return usedChars;
     }
 
 

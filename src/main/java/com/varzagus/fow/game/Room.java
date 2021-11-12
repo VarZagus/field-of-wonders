@@ -1,6 +1,5 @@
 package com.varzagus.fow.game;
 
-import com.varzagus.fow.api.Host;
 import com.varzagus.fow.domain.Question;
 import com.varzagus.fow.domain.User;
 
@@ -12,35 +11,27 @@ import java.util.List;
  * пользователей, которые учасвствуют в игре, управляет раундами игры
  * и хранит их историю
  */
-public class Room implements Host {
+public class Room {
 
-    private String name;
-    private List<User> userList;
-    private List<Round> rounds;
+    //Список пользователей
+    private final List<User> userList;
+
+    private GameWorker gameWorker;
+    //Список раундов
+    private final List<Round> rounds;
     private Round currentRound;
+    //Заполнена ли комната
+    private boolean isFull = false;
+    //Запущена ли уже комната для игры
+    private boolean started = false;
+
 
     public Round getCurrentRound() {
         return currentRound;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
-    }
-
     public List<Round> getRounds() {
         return rounds;
-    }
-
-    public void setRounds(List<Round> rounds) {
-        this.rounds = rounds;
     }
 
     public Room(List<User> userList){
@@ -55,18 +46,35 @@ public class Room implements Host {
         currentRound = round;
     }
 
-    @Override
+
     public List<User> getUserList() {
         return userList;
     }
 
+
     /**
-     * Удаление пользователя из комнаты и текущего раунда
+     * Добавление пользователя в комнату
+     * @param user
+     */
+    public void addUser(User user) {
+        if(!isFull) {
+            userList.add(user);
+            if(userList.size() == 3) {
+                isFull = true;
+            }
+        }
+
+    }
+
+    /**
+     * Удаление пользователя из комнаты и текущего раунда, если игра начата
      * @param user
      */
     public void deleteUser(User user) {
         userList.remove(user);
-        currentRound.deleteByUser(user);
+        if(started) {
+            currentRound.deleteByUser(user);
+        }
     }
 
 

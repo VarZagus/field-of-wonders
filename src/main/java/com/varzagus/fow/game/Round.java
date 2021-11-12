@@ -11,15 +11,22 @@ import java.util.*;
  */
 public class Round {
 
-    private Question question;
-    private List<Player> playerList;
+    private final Question question;
+    private final List<Player> playerList;
     private boolean isFinished = false;
     private Board board;
     private Drum drum = new Drum();
     private DrumPosition currentDrumPosition;
     private Player winner;
     //какой игрок сейчас ходит
-    private int currentPlayer;
+    private int currentPlayerIndex;
+
+    public Set<Integer> getMutedPlayers() {
+        return mutedPlayers;
+    }
+
+    //Игроки, которые не угадали слово и выбыли из раунда
+    private final Set<Integer> mutedPlayers = new HashSet<>();
 
 
     public Round(Question question, List<User> userList){
@@ -27,12 +34,19 @@ public class Round {
         this.question = question;
         userList.forEach(user -> playerList.add(new Player(user, this)));
         board = new Board(question.getAnswer());
-        currentPlayer = 0;
+        currentPlayerIndex = 0;
     }
+
     //переключение на следующего игрока
     public void nextPlayer(){
-        if(currentPlayer < playerList.size()-1) currentPlayer++;
-        else currentPlayer = 0;
+        if(isAllPlayersMuted()) {
+            return;
+        }
+        if(currentPlayerIndex < playerList.size()-1) currentPlayerIndex++;
+        else currentPlayerIndex = 0;
+        if(mutedPlayers.contains(currentPlayerIndex)) {
+            nextPlayer();
+        }
     }
 
 
@@ -41,26 +55,41 @@ public class Round {
        return currentDrumPosition;
     }
 
-    public void deletePlayer(Player player) {
-        playerList.remove(playerList.indexOf(player));
-        if(currentPlayer >= playerList.size()) {
-            currentPlayer = 0;
-        }
+    public void mutePlayer(Player player) {
+        mutedPlayers.add(playerList.indexOf(player));
+
     }
 
     public void deleteByUser(User user) {
         Player player = playerList.stream().filter(p -> p.getUser() == user).findFirst().orElse(null);
         if(player != null) {
-            deletePlayer(player);
+            playerList.remove(playerList.indexOf(player));
+            if(currentPlayerIndex >= playerList.size()) {
+                currentPlayerIndex = 0;
+            }
         }
     }
 
-    public boolean playerMove(char playerAnswer){
+    public boolean setPlayerAnswer(char playerAnswer){
         boolean res = board.checkAnswer(playerAnswer);
         if(board.isFull()) isFinished = true;
         return res;
     }
-
+    
+    public boolean setPlayerAnswer(String answer) {
+        boolean result = board.checkAnswer(answer);
+        if(result) {
+            finish();
+        }
+        else {
+            mutedPlayers.add(currentPlayerIndex);
+        }
+        return result;
+    }
+    
+    public void setPlayerAnswer(int answer) {
+        board.openChar(answer);
+    }
 
 
     public void finish() {
@@ -69,7 +98,7 @@ public class Round {
     }
 
     public Player getWinner(){
-        return playerList.get(currentPlayer);
+        return playerList.get(currentPlayerIndex);
 
     }
 
@@ -94,11 +123,21 @@ public class Round {
         return board;
     }
 
+    //Получить игрока, который делает ход
     public Player getCurrentPlayer() {
-        if(currentPlayer >= playerList.size()) {
-            currentPlayer = 0;
+        if(currentPlayerIndex >= playerList.size()) {
+            currentPlayerIndex = 0;
         }
-        return playerList.get(currentPlayer);
+        return playerList.get(currentPlayerIndex);
+    }
+
+    private boolean isAllPlayersMuted() {
+        for(int i = 0; i < playerList.size(); i++) {
+            if(!mutedPlayers.contains(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

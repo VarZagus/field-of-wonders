@@ -18,10 +18,6 @@ public class Player {
         return user;
     }
 
-    public Round getRound() {
-        return round;
-    }
-
     public String getName(){
         return user.getLogin();
     }
