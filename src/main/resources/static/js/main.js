@@ -20,6 +20,7 @@ var drumElement = document.querySelector('#drumPos');
 var currentPlayerElement = document.querySelector('#current-player');
 var questionElement = document.querySelector('#question');
 var usedCharsElement = document.querySelector("#used-chars");
+var rollButton = document.querySelector('#roll-button');
 var stompClient = null;
 var username = null;
 var roomId = null;
@@ -37,6 +38,7 @@ var question = null;
 var lastMessage;
 var previousPlayer = null;
 var isSubscribed = false;
+var rolled = false;
 
 
 
@@ -92,10 +94,20 @@ function sendAnswer(event) {
         }
     }
     if(lastMessage.wantedAction === 'CHOICE') {
-        var playerAnswerWord = wordInput.value.trim();
+        var playerAnswerWord = wordInput.value.trim().toLowerCase();
         var action;
-        if(playerAnswerWord !== "") {
+        if(!rolled) {
             answer = playerAnswerWord;
+            if(answer === ""){
+                alert("Введите слово!");
+                event.preventDefault();
+                return;
+            }
+            if(!answer.match(/[a-zA-ZА-Яа-я]+/)){
+                alert("Введены неккоректные символы!");
+                event.preventDefault();
+                return;
+            }
             action = 'ANSWER_WORD'
         }
         else {
@@ -113,7 +125,22 @@ function sendAnswer(event) {
         }
     }
     if(lastMessage.wantedAction === 'ANSWER_CHAR') {
-        var answer = charInput.value.trim();
+        var answer = charInput.value.trim().toLowerCase();
+        if(answer === ""){
+            alert("Введите букву!");
+            event.preventDefault();
+            return;
+        }
+        if(usedChars.includes(answer)) {
+            alert("Такая буква уже была названа!");
+            event.preventDefault();
+            return;
+        }
+        if(!answer.match(/[a-zA-ZА-Яа-я]+/)){
+            alert("Введены неккоректные символы!");
+            event.preventDefault();
+            return;
+        }
         if(stompClient && answer !== "") {
             var message = {
                 messageType: 'ANSWER',
@@ -128,9 +155,15 @@ function sendAnswer(event) {
     if(lastMessage.wantedAction === 'ANSWER_INDEX') {
         var answer = indexInput.value;
         var isOpened = false;
-        if(board.charAt(answer-1) != '*') {
+        if(answer > board.length){
+            alert("Неккоректный номер буквы!");
+            event.preventDefault();
+            return;
+        }
+        if(board.charAt(answer-1) !== '*') {
             isOpened = true;
             alert("Буква на такой позиции уже открыта!");
+            event.preventDefault();
             return;
         }
         if(!isOpened && stompClient){
@@ -146,6 +179,7 @@ function sendAnswer(event) {
 
     }
     hideAllAnswers();
+    rolled = false;
     event.preventDefault();
 }
 function onMessageReceived(payload) {
@@ -334,5 +368,10 @@ function getAllParamsFromMessage(message) {
 
 
 }
+rollButton.onclick = function () {
+    clearAllAnswers();
+    rolled = true;
+}
+
 usernameForm.addEventListener('submit', connect, true)
 gameForm.addEventListener('submit', sendAnswer, true)
