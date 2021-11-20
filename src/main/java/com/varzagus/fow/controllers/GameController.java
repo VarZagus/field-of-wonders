@@ -5,29 +5,32 @@ import com.varzagus.fow.domain.User;
 import com.varzagus.fow.enums.GameMessageType;
 import com.varzagus.fow.enums.UserMessageType;
 import com.varzagus.fow.game.Room;
+import com.varzagus.fow.game.RoomProvider;
 import com.varzagus.fow.messaging.UserReceiveMessage;
 import com.varzagus.fow.messaging.UserResponseMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class GameController {
 
-    List<Room> rooms = new ArrayList<>();
+    @Autowired
+    RoomProvider roomProvider;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
 
     @MessageMapping("/game")
-    public void gameMessage(@Payload UserReceiveMessage userGameMessage) throws InterruptedException {
+    public void gameMessage(@Payload UserReceiveMessage userGameMessage, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
         UserResponseMessage responseMessage;
+        List<Room> rooms = roomProvider.getRooms();
         if(userGameMessage.getMessageType() == UserMessageType.SEARCH) {
             User user = new User(userGameMessage.getUserName(), "123");
             System.out.println(userGameMessage.getUserName());
@@ -45,7 +48,10 @@ public class GameController {
             if(responseMessage.getGameMessageType() == GameMessageType.NEW_ROUND) {
                 messagingTemplate.convertAndSend("/game/room/" + responseMessage.getRoomId(), responseMessage);
             }
-
+            if(headerAccessor != null) {
+                headerAccessor.getSessionAttributes().put("username",userGameMessage.getUserName());
+                headerAccessor.getSessionAttributes().put("room",responseMessage.getRoomId());
+            }
         }
         else {
             int roomId = userGameMessage.getRoomId();

@@ -80,16 +80,6 @@ public class Room {
 
     }
 
-    /**
-     * Удаление пользователя из комнаты и текущего раунда, если игра начата
-     * @param user
-     */
-    public void deleteUser(User user) {
-        userList.remove(user);
-        if(started) {
-            currentRound.deleteByUser(user);
-        }
-    }
 
 
     public int getId() {
@@ -152,9 +142,18 @@ public class Room {
         }
         return null;
     }
+    public void deleteUser(String username){
+        User user = userList.stream().filter(user1 -> user1.getLogin().equals(username)).findFirst().orElse(null);
+        if(user == null) return;
+        if(userList.contains(user)){
+            userList.remove(user);
+            isFull = false;
+        }
+    }
 
     public UserResponseMessage createStartMessage() {
         UserResponseMessage responseMessage = new UserResponseMessage();
+        started = true;
         responseMessage.setRoomId(id);
         BoardStatus boardStatus = new BoardStatus();
         boardStatus.setBoard(currentRound.getBoard().getCurrentBoard());
@@ -167,7 +166,7 @@ public class Room {
         responseMessage.setPlayerList(currentRound.getPlayerList());
         return responseMessage;
     }
-//TODO: в js сделать проверку на  повтор буквы, филтрацию букв
+
     public UserResponseMessage createWaitingMessage() {
         UserResponseMessage responseMessage = new UserResponseMessage();
         responseMessage.setRoomId(id);
@@ -228,6 +227,18 @@ public class Room {
         responseMessage.setGameMessageType(GameMessageType.NEXT_STEP);
         responseMessage.setMutedPlayers(currentRound.getMutedPlayers());
         responseMessage.setPlayerList(currentRound.getPlayerList());
+        return responseMessage;
+    }
+
+    public UserResponseMessage createUserLeaveMessage(String username){
+        UserResponseMessage responseMessage = new UserResponseMessage();
+        responseMessage.setGameMessageType(GameMessageType.LEAVE);
+        User user = userList.stream().filter(user1 -> user1.getLogin().equals(username)).findFirst().orElse(null);
+        if(user == null) {
+            return null;
+        }
+        Player player = new Player(user);
+        responseMessage.setCurrentPlayer(player);
         return responseMessage;
     }
 

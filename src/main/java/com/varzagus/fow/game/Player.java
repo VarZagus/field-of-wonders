@@ -8,9 +8,8 @@ public class Player {
     private Round round;
     private User user;
 
-    public Player(User user, Round round) {
+    public Player(User user) {
         this.user = user;
-        this.round = round;
         score = 0;
     }
 

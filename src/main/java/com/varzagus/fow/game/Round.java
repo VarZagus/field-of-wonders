@@ -32,7 +32,7 @@ public class Round {
     public Round(Question question, List<User> userList){
         playerList = new ArrayList<>();
         this.question = question;
-        userList.forEach(user -> playerList.add(new Player(user, this)));
+        userList.forEach(user -> playerList.add(new Player(user)));
         board = new Board(question.getAnswer());
         currentPlayerIndex = 0;
     }

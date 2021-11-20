@@ -187,6 +187,10 @@ function onMessageReceived(payload) {
     lastMessage = JSON.parse(payload.body);
     getAllParamsFromMessage(lastMessage);
     gameMessageType = lastMessage.gameMessageType;
+    if(gameMessageType === "LEAVE") {
+        alert("Игра окончена, так как игрок " + currentPlayer + " вышел из игры!");
+        window.location.reload();
+    }
     if(lastMessage.gameMessageType === 'NEW_ROUND') {
         alert("НАЧАЛО НОВОГО РАУНДА!")
         stepWaitingElement.classList.add('hidden');

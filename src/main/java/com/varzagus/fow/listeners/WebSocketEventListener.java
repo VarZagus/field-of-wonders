@@ -1,6 +1,8 @@
 package com.varzagus.fow.listeners;
 
 import com.varzagus.fow.enums.GameMessageType;
+import com.varzagus.fow.game.Room;
+import com.varzagus.fow.game.RoomProvider;
 import com.varzagus.fow.messaging.UserResponseMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,9 @@ public class WebSocketEventListener {
     @Autowired
     private SimpMessageSendingOperations messagingTemplate;
 
+    @Autowired
+    RoomProvider roomProvider;
+
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
         logger.info("Received a new web socket connection");
@@ -33,11 +38,16 @@ public class WebSocketEventListener {
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String username = (String) headerAccessor.getSessionAttributes().get("username");
+        int roomId = (Integer) headerAccessor.getSessionAttributes().get("room");
         if(username != null) {
             logger.info("User Disconnected : " + username);
-            UserResponseMessage responseMessage = new UserResponseMessage();
-            responseMessage.setGameMessageType(GameMessageType.LEAVE);
-           // messagingTemplate.convertAndSend("/game/public", responseMessage);
+            Room room = roomProvider.getRooms().get(roomId);
+            if(!room.isStarted()){
+                room.deleteUser(username);
+            }
+            else{
+                messagingTemplate.convertAndSend("/game/room/" + roomId,room.createUserLeaveMessage(username));
+            }
         }
     }
 }
