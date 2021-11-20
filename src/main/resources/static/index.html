@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" charset="UTF-8">
+    <title>Field of Wonders</title>
+    <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+<noscript>
+    <h2>Sorry! Your browser doesn't support Javascript</h2>
+</noscript>
+<div id="username-page">
+    <div class="username-page-container">
+        <h1 class="title">Type your username</h1>
+        <form id="usernameForm" name="usernameForm">
+            <div class="form-group">
+                <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" />
+            </div>
+            <div class="form-group">
+                <button type="submit" class="accent username-submit">Start game</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="waiting-page" class="hidden">
+    <div class="username-page-container">
+        <h1 class="title">Ожидание других игроков...</h1>
+    </div>
+</div>
+<div id="game-page" class="hidden">
+    <div class="game-container">
+        <div class="game-header" >
+            <h2>Field of Wonders Game</h2>
+        </div>
+        <div class="connecting">
+            Waiting players...
+        </div>
+        <form id="gameForm" name="gameForm">
+            <div class="form-group">
+                <div class="question">
+                    <span>Вопрос:<h1 id="question"></h1></span>
+                </div>
+                <div class = "userList">
+                    <span>Список игроков:</span></br>
+                    <ul id="players">
+                    </ul>
+                </div>
+                <div class="current-player-step">
+                    <span>Сейчас ходит:</span>
+                    <span id="current-player"></span>
+                </div>
+                <div class="drum">
+                    <span>Текущая позиция барабана:</span>
+                    <span id="drumPos"></span>
+                </div>
+                <div class="board-class">
+                    <span>Текущее состояние доски:</span>
+                    <span id="board"></span>
+                </div>
+                <div class="used-chars">
+                    <span>Использованные буквы:</span>
+                    <span id="used-chars"></span>
+                </div>
+                <br>
+                <div class="input-group clearfix">
+                    <div class="answer-word hidden" id="word-answer" >
+                        <input type="text" id="answer-word" placeholder="Введите слово..." autocomplete="off" class="form-control">
+                        <button type="submit" class="primary">Отправить слово</button>
+                        <br>
+                    </div>
+                    <div class="rollSubmit hidden" id="roll-submit">
+                        <button type="submit" class="primary" id="roll-button">Вращать барабан</button>
+                    </div>
+                    <div class="charAnswer hidden" id="char-answer">
+                        <input type="text" id="answer-char" autocomplete="off" maxlength="1" minlength="1">
+                        <button type="submit" class="primary" id="char-button">Выбрать букву</button>
+                    </div>
+                    <div class="posAnswer hidden" id="pos-answer">
+                        <input type="number" min="1" id="num-answer">
+                        <button type="submit" class="primary" id="index-button">Открыть букву</button>
+                    </div>
+                </div>
+                <div id="step-wait" class="hidden">
+                    <h1 class="title" id="step-player"></h1>
+                </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>

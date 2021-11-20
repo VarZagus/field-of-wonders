@@ -13,6 +13,4 @@ public enum DrumPosition {
     FIFTEEN_POINTS,
     TWENTY_POINTS,
     TWENTY_FIVE_POINTS
-
-
 }

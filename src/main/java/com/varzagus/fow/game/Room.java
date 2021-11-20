@@ -2,9 +2,16 @@ package com.varzagus.fow.game;
 
 import com.varzagus.fow.domain.Question;
 import com.varzagus.fow.domain.User;
+import com.varzagus.fow.enums.DrumPosition;
+import com.varzagus.fow.enums.GameMessageType;
+import com.varzagus.fow.enums.PlayerActionType;
+import com.varzagus.fow.messaging.BoardStatus;
+import com.varzagus.fow.messaging.UserReceiveMessage;
+import com.varzagus.fow.messaging.UserResponseMessage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Это класс, который управляет самой игрой. Он  хранит в себе
@@ -13,15 +20,23 @@ import java.util.List;
  */
 public class Room {
 
-    //Список пользователей
-    private final List<User> userList;
+    private static int count = 0;
 
-    private GameWorker gameWorker;
+    //Список пользователей
+    private final List<User> userList = new ArrayList<>();
+    private int id;
     //Список раундов
     private final List<Round> rounds;
     private Round currentRound;
+
+    public boolean isFull() {
+        return isFull;
+    }
+
     //Заполнена ли комната
     private boolean isFull = false;
+
+
     //Запущена ли уже комната для игры
     private boolean started = false;
 
@@ -34,9 +49,8 @@ public class Room {
         return rounds;
     }
 
-    public Room(List<User> userList){
-
-        this.userList = userList;
+    public Room(){
+        id = count++;
         rounds = new ArrayList<>();
     }
 
@@ -76,6 +90,154 @@ public class Room {
             currentRound.deleteByUser(user);
         }
     }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public UserResponseMessage sendUserAddMessage(User user) {
+        addUser(user);
+        if(isFull) {
+            //TODO генерация вопроса из бд
+            startNewRound(new Question("aboba", "aboba"));
+            return createStartMessage();
+        }
+        return createWaitingMessage();
+    }
+    //TODO: отправка сообщения о начале нового раунда по завершению старого
+    public UserResponseMessage sendUserAnswerMessage(UserReceiveMessage message) {
+        PlayerActionType playerActionType = message.getPlayerActionType();
+        if(playerActionType == PlayerActionType.ANSWER_CHAR) {
+            char answer = message.getAnswer().toLowerCase(Locale.ROOT).charAt(0);
+            boolean result = currentRound.setPlayerAnswer(answer);
+            if(result) {
+                if(currentRound.isFinished()) {
+                    return createFinishMessage(PlayerActionType.ANSWER_CHAR);
+                }
+                return createPlayerAnswerMessage(PlayerActionType.CHOICE);
+            }
+            return createNextPlayerMessage(message.getPlayerActionType(), message.getAnswer());
+        }
+        if(playerActionType == PlayerActionType.ANSWER_WORD) {
+            boolean result = currentRound.setPlayerAnswer(message.getAnswer());
+            if(result) {
+                return createFinishMessage(PlayerActionType.ANSWER_WORD);
+            }
+            else {
+                return createNextPlayerMessage(message.getPlayerActionType(), message.getAnswer());
+            }
+        }
+        if(playerActionType == PlayerActionType.ANSWER_INDEX) {
+            currentRound.setPlayerAnswer(Integer.parseInt(message.getAnswer()));
+            if(currentRound.isFinished()) {
+               return createFinishMessage(PlayerActionType.ANSWER_INDEX);
+            }
+            return createNextPlayerMessage(message.getPlayerActionType(), message.getAnswer());
+        }
+        if(playerActionType == PlayerActionType.ROLL) {
+            DrumPosition drumPosition = currentRound.rollDrum();
+            if(drumPosition == DrumPosition.BANKRUPT || drumPosition == DrumPosition.SECTOR_NULL) {
+                return createNextPlayerMessage(PlayerActionType.ROLL, message.getAnswer());
+
+            }
+            if(drumPosition == DrumPosition.SECTOR_PLUS) {
+                return createPlayerAnswerMessage(PlayerActionType.ANSWER_INDEX);
+            }
+            return createPlayerAnswerMessage(PlayerActionType.ANSWER_CHAR);
+        }
+        return null;
+    }
+
+    public UserResponseMessage createStartMessage() {
+        UserResponseMessage responseMessage = new UserResponseMessage();
+        responseMessage.setRoomId(id);
+        BoardStatus boardStatus = new BoardStatus();
+        boardStatus.setBoard(currentRound.getBoard().getCurrentBoard());
+        boardStatus.setUsedChars(currentRound.getBoard().getUsedChars());
+        responseMessage.setBoard(boardStatus);
+        responseMessage.setQuestion(currentRound.getQuestion().getQuestion());
+        responseMessage.setWantedAction(PlayerActionType.ROLL);
+        responseMessage.setGameMessageType(GameMessageType.NEW_ROUND);
+        responseMessage.setCurrentPlayer(currentRound.getCurrentPlayer());
+        responseMessage.setPlayerList(currentRound.getPlayerList());
+        return responseMessage;
+    }
+//TODO: в js сделать проверку на  повтор буквы, филтрацию букв
+    public UserResponseMessage createWaitingMessage() {
+        UserResponseMessage responseMessage = new UserResponseMessage();
+        responseMessage.setRoomId(id);
+        responseMessage.setGameMessageType(GameMessageType.WAITING);
+        return responseMessage;
+    }
+
+    public UserResponseMessage createFinishMessage(PlayerActionType previousAction) {
+        UserResponseMessage responseMessage = new UserResponseMessage();
+        responseMessage.setGameMessageType(GameMessageType.FINISH);
+        responseMessage.setPreviousAction(previousAction);
+        responseMessage.setRoomId(id);
+        responseMessage.setCurrentPlayer(currentRound.getCurrentPlayer());
+        BoardStatus boardStatus = new BoardStatus();
+        boardStatus.setBoard(currentRound.getBoard().getCurrentBoard());
+        boardStatus.setUsedChars(currentRound.getBoard().getUsedChars());
+        responseMessage.setCurrentDrumPosition(currentRound.getCurrentDrumPosition());
+        responseMessage.setBoard(boardStatus);
+        responseMessage.setPlayerList(currentRound.getPlayerList());
+        return responseMessage;
+    }
+
+    public UserResponseMessage createPlayerAnswerMessage(PlayerActionType actionType) {
+        UserResponseMessage responseMessage = new UserResponseMessage();
+        if(actionType == PlayerActionType.ANSWER_CHAR || actionType == PlayerActionType.ANSWER_INDEX){
+            responseMessage.setPreviousAction(PlayerActionType.ROLL);
+        }
+        else if(actionType == PlayerActionType.CHOICE) {
+            responseMessage.setPreviousAction(PlayerActionType.ANSWER_CHAR);
+
+        }
+        responseMessage.setGameMessageType(GameMessageType.PLAYER_STEP);;
+        responseMessage.setRoomId(id);
+        BoardStatus boardStatus = new BoardStatus();
+        boardStatus.setBoard(currentRound.getBoard().getCurrentBoard());
+        boardStatus.setUsedChars(currentRound.getBoard().getUsedChars());
+        responseMessage.setBoard(boardStatus);
+        responseMessage.setWantedAction(actionType);
+        responseMessage.setCurrentDrumPosition(currentRound.getCurrentDrumPosition());
+        responseMessage.setCurrentPlayer(currentRound.getCurrentPlayer());
+        responseMessage.setPlayerList(currentRound.getPlayerList());
+        return responseMessage;
+    }
+
+    public UserResponseMessage createNextPlayerMessage(PlayerActionType previousAction, String answer) {
+        UserResponseMessage responseMessage = new UserResponseMessage();
+        responseMessage.setPreviousPlayer(currentRound.getCurrentPlayer());
+        currentRound.nextPlayer();
+        responseMessage.setRoomId(id);
+        responseMessage.setLastAnswer(answer);
+        responseMessage.setCurrentPlayer(currentRound.getCurrentPlayer());
+        responseMessage.setPreviousAction(previousAction);
+        BoardStatus boardStatus = new BoardStatus();
+        boardStatus.setBoard(currentRound.getBoard().getCurrentBoard());
+        boardStatus.setUsedChars(currentRound.getBoard().getUsedChars());
+        responseMessage.setCurrentDrumPosition(currentRound.getCurrentDrumPosition());
+        responseMessage.setBoard(boardStatus);
+        responseMessage.setGameMessageType(GameMessageType.NEXT_STEP);
+        responseMessage.setMutedPlayers(currentRound.getMutedPlayers());
+        responseMessage.setPlayerList(currentRound.getPlayerList());
+        return responseMessage;
+    }
+
+//    public UserResponseMessage createDefaultMessage() {
+//        UserResponseMessage responseMessage = new UserResponseMessage();
+//        return  responseMessage;
+//    }
+
+
+
 
 
 }

@@ -89,6 +89,9 @@ public class Round {
     
     public void setPlayerAnswer(int answer) {
         board.openChar(answer);
+        if(board.isFull()){
+            finish();
+        }
     }
 
 

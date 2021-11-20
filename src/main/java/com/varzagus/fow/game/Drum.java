@@ -86,7 +86,7 @@ public class Drum {
     }
 
     private void fifteen(Player player) {
-        player.setScore(player.getScore());
+        player.setScore(player.getScore() + 15);
     }
 
     private void twenty(Player player) {

@@ -2,8 +2,9 @@ package com.varzagus.fow.enums;
 
 public enum GameMessageType {
     NEW_ROUND,
-    PLAYER_ANSWER,
-    PLAYER_ROLL,
+    PLAYER_STEP,
     NEXT_STEP,
-    FINISH
+    FINISH,
+    LEAVE,
+    WAITING
 }
