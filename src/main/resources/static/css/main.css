@@ -45,6 +45,15 @@ body:before {
 .form-group {
     margin-bottom: 15px;
 }
+#user-table {
+    float: right;
+}
+#user-table td {
+    padding-left: 10px;
+}
+.user-login {
+    font-weight: bold;
+}
 input {
     padding-left: 10px;
     outline: none;

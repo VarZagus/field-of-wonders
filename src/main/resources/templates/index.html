@@ -11,9 +11,16 @@
     <h2>Sorry! Your browser doesn't support Javascript</h2>
 </noscript>
 <div id="user-page">
-    <form th:action="@{/logout}" method="post">
-        <div class="form-group"><button type="submit" value="Зарегистрироваться" class="accent username-submit">Выйти</button></div>
-    </form>
+    <table id="user-table">
+        <tr>
+        <td><span class="user-login" th:text="${login}"></span></td>
+        <td>
+            <form th:action="@{/logout}" method="post">
+            <button type="submit" value="Зарегистрироваться" class="accent username-submit">Выйти</button>
+        </form>
+        </td>
+        </tr>
+    </table>
 </div>
 <div id="username-page">
     <div class="username-page-container">
