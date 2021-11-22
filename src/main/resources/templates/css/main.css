@@ -102,6 +102,9 @@ button.accent {
     padding: 35px 55px 35px;
     background: #128ff2;
 }
+#login-input {
+    padding-left: 1px;
+}
 .username-page-container {
     background: #fff;
     box-shadow: 0 1px 11px rgba(0, 0, 0, 0.27);

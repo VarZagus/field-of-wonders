@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" charset="UTF-8">
     <title>Field of Wonders</title>
@@ -9,15 +10,20 @@
 <noscript>
     <h2>Sorry! Your browser doesn't support Javascript</h2>
 </noscript>
+<div id="user-page">
+    <form th:action="@{/logout}" method="post">
+        <div class="form-group"><button type="submit" value="Зарегистрироваться" class="accent username-submit">Выйти</button></div>
+    </form>
+</div>
 <div id="username-page">
     <div class="username-page-container">
-        <h1 class="title">Type your username</h1>
+        <h1 class="title">Нажмите кнопку, чтобы начать поиск игры!</h1>
         <form id="usernameForm" name="usernameForm">
-            <div class="form-group">
-                <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" />
+            <div class="form-group hidden">
+                <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" th:value="${login}"/>
             </div>
             <div class="form-group">
-                <button type="submit" class="accent username-submit">Start game</button>
+                <button type="submit" class="accent username-submit">Начать</button>
             </div>
         </form>
     </div>
@@ -33,7 +39,7 @@
             <h2>Field of Wonders Game</h2>
         </div>
         <div class="connecting">
-            Waiting players...
+            Ожидание других игроков...
         </div>
         <form id="gameForm" name="gameForm">
             <div class="form-group">
@@ -82,7 +88,6 @@
                 </div>
                 <div id="step-wait" class="hidden">
                     <h1 class="title" id="step-player"></h1>
-                </div>
                 </div>
             </div>
         </form>

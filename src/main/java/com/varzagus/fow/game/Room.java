@@ -99,7 +99,6 @@ public class Room {
         }
         return createWaitingMessage();
     }
-    //TODO: отправка сообщения о начале нового раунда по завершению старого
     public UserResponseMessage sendUserAnswerMessage(UserReceiveMessage message) {
         PlayerActionType playerActionType = message.getPlayerActionType();
         if(playerActionType == PlayerActionType.ANSWER_CHAR) {

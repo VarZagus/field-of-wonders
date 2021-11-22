@@ -16,7 +16,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 /**
  * Класс для прослушивания ивентов отключения пользователей
- * TODO: доработать отправку сообщения при отключении пользователя
+ *
  */
 @Component
 public class WebSocketEventListener {

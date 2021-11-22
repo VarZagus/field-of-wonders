@@ -8,23 +8,29 @@ import com.varzagus.fow.game.Room;
 import com.varzagus.fow.game.RoomProvider;
 import com.varzagus.fow.messaging.UserReceiveMessage;
 import com.varzagus.fow.messaging.UserResponseMessage;
+import com.varzagus.fow.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class GameController {
 
     @Autowired
-    RoomProvider roomProvider;
+    private RoomProvider roomProvider;
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+
+    @Autowired
+    private AuthService authService;
 
 
     @MessageMapping("/game")
@@ -32,7 +38,9 @@ public class GameController {
         UserResponseMessage responseMessage;
         List<Room> rooms = roomProvider.getRooms();
         if(userGameMessage.getMessageType() == UserMessageType.SEARCH) {
-            User user = new User(userGameMessage.getUserName(), "123");
+            User user = new User();
+            user.setLogin(userGameMessage.getUserName());
+            user.setPassword("123");
             System.out.println(userGameMessage.getUserName());
             if(rooms.size() == 0 || rooms.get(rooms.size()-1).isFull()) {
                Room room = new Room();
@@ -66,6 +74,13 @@ public class GameController {
             }
         }
     }
+
+    @GetMapping("/")
+    public String index(Map<String, Object> model){
+        model.put("login", authService.getLoggedInUser().getLogin());
+        return "index";
+    }
+
 
 
 
