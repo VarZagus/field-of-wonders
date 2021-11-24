@@ -13,7 +13,7 @@
 <div id="user-page">
     <table id="user-table">
         <tr>
-        <td><span class="user-login" th:text="${login}"></span></td>
+        <td><a href="/userinfo" class="user-login" th:text="${login}"></a></td>
         <td>
             <form th:action="@{/logout}" method="post">
             <button type="submit" value="Зарегистрироваться" class="accent username-submit">Выйти</button>

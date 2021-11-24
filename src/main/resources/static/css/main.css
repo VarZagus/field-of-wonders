@@ -53,6 +53,7 @@ body:before {
 }
 .user-login {
     font-weight: bold;
+    color: black;
 }
 input {
     padding-left: 10px;
@@ -67,6 +68,10 @@ h1 {
 }
 a {
     color: #128ff2;
+}
+.table-result{
+    max-height: 400px;
+    overflow: auto;
 }
 button {
     box-shadow: none;
