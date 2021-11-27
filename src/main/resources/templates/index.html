@@ -13,7 +13,10 @@
 <div id="user-page">
     <table id="user-table">
         <tr>
-        <td><a href="/userinfo" class="user-login" th:text="${login}"></a></td>
+            <td th:if="${user.role.name()=='ADMIN'}"><a href="/admin/questions" class="user-login">Вопросы</a> </td>
+            <td th:if="${user.role.name()=='ADMIN'}"><a href="/admin/users" class="user-login">Пользователи</a>
+            </td>
+        <td><a href="/userinfo" class="user-login" th:text="${user.login}"></a></td>
         <td>
             <form th:action="@{/logout}" method="post">
             <button type="submit" value="Зарегистрироваться" class="accent username-submit">Выйти</button>
@@ -27,7 +30,7 @@
         <h1 class="title">Нажмите кнопку, чтобы начать поиск игры!</h1>
         <form id="usernameForm" name="usernameForm">
             <div class="form-group hidden">
-                <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" th:value="${login}"/>
+                <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" th:value="${user.login}"/>
             </div>
             <div class="form-group">
                 <button type="submit" class="accent username-submit">Начать</button>

@@ -1,17 +1,36 @@
 package com.varzagus.fow.domain;
 
-public class Question {
-    private final String question;
-    private final String answer;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-    public Question(String question, String answer){
-        this.question = question;
-        this.answer = answer;
-    }
+@Entity
+public class Question {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private String question;
+    private String answer;
+
 
     public String getQuestion() { return this.question; }
 
     public String getAnswer() { return this.answer; }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
 }

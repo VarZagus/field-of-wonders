@@ -8,6 +8,9 @@ import com.varzagus.fow.enums.PlayerActionType;
 import com.varzagus.fow.messaging.BoardStatus;
 import com.varzagus.fow.messaging.UserReceiveMessage;
 import com.varzagus.fow.messaging.UserResponseMessage;
+import com.varzagus.fow.repository.QuestionRepository;
+import com.varzagus.fow.service.QuestionService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +26,7 @@ public class Room {
     private static int count = 0;
 
     //Список пользователей
-    private final List<User> userList = new ArrayList<>();
+    private List<User> userList = new ArrayList<>();
     private int id;
     //Список раундов
     private final List<Round> rounds;
@@ -45,6 +48,10 @@ public class Room {
         return currentRound;
     }
 
+    public void setUserList(List<User> userList) {
+        this.userList = userList;
+    }
+
     public List<Round> getRounds() {
         return rounds;
     }
@@ -64,6 +71,7 @@ public class Room {
     public List<User> getUserList() {
         return userList;
     }
+
 
 
     /**
@@ -90,11 +98,10 @@ public class Room {
         return started;
     }
 
-    public UserResponseMessage sendUserAddMessage(User user) {
+    public UserResponseMessage sendUserAddMessage(User user, QuestionService questionService) {
         addUser(user);
         if(isFull) {
-            //TODO генерация вопроса из бд
-            startNewRound(new Question("aboba", "aboba"));
+            startNewRound(questionService.getRandomQuestion());
             return createStartMessage();
         }
         return createWaitingMessage();

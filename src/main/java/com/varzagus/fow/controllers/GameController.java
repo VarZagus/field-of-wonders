@@ -13,6 +13,7 @@ import com.varzagus.fow.messaging.UserResponseMessage;
 import com.varzagus.fow.repository.GameResultRepository;
 import com.varzagus.fow.repository.UserRepository;
 import com.varzagus.fow.service.AuthService;
+import com.varzagus.fow.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +45,9 @@ public class GameController {
     @Autowired
     GameResultRepository gameResultRepository;
 
+    @Autowired
+    QuestionService questionService;
+
 
     @MessageMapping("/game")
     public void gameMessage(@Payload UserReceiveMessage userGameMessage, SimpMessageHeaderAccessor headerAccessor) throws InterruptedException {
@@ -54,10 +59,10 @@ public class GameController {
                Room room = new Room();
                //room.addUser(user);
                rooms.add(room);
-               responseMessage = room.sendUserAddMessage(user);
+               responseMessage = room.sendUserAddMessage(user, questionService);
             }
             else {
-                responseMessage = rooms.get(rooms.size() - 1).sendUserAddMessage(user);
+                responseMessage = rooms.get(rooms.size() - 1).sendUserAddMessage(user, questionService);
             }
             messagingTemplate.convertAndSend("/" + userGameMessage.getUserName() + "/game", responseMessage);
             messagingTemplate.convertAndSendToUser(userGameMessage.getUserName(),"/game",responseMessage);
@@ -79,28 +84,28 @@ public class GameController {
                     GameResult gameResult = new GameResult();
                     gameResult.setDate(LocalDate.now());
                     gameResult.setWinner(room.getCurrentRound().getWinner().getUser());
-                    System.out.println(gameResult.getWinner().getId());
                     List<Player> players = room.getCurrentRound().getPlayerList();
                     players.forEach(p->{
                         gameResult.getScores().put(p.getUser(), p.getScore());
                     });
                     GameResult newGameResult = gameResultRepository.save(gameResult);
                     List<User> users = room.getUserList();
+                    List<User> newUsers = new ArrayList<>();
                     users.forEach(u->{
                         u.getResults().add(newGameResult);
-                        userRepository.save(u);
+                        newUsers.add(userRepository.save(u));
                     });
-                    room.startNewRound(new Question("aboba", "aboba"));
+                    room.setUserList(newUsers);
+                    room.startNewRound(questionService.getRandomQuestion());
                     messagingTemplate.convertAndSend("/game/room/" + roomId, room.createStartMessage());
                 }
-                //TODO обработка следующего раунда
             }
         }
     }
 
     @GetMapping("/")
     public String index(Map<String, Object> model){
-        model.put("login", authService.getLoggedInUser().getLogin());
+        model.put("user", authService.getLoggedInUser());
         return "index";
     }
 
