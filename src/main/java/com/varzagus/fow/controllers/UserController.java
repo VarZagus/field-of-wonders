@@ -32,7 +32,6 @@ public class UserController {
     public String createUser(User user, Map<String, Object> model) {
         if(userRepository.findByLogin(user.getLogin()) != null) {
             model.put("message","Данный пользователь уже существует!");
-
             return "registration";
         }
 

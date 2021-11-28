@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/admin")
-@PreAuthorize("hasAuthority('ADMIN')")
+@PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ROLE_ADMIN')")
 public class AdminController {
     @Autowired
     UserRepository userRepository;

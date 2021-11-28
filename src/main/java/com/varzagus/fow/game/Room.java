@@ -31,15 +31,8 @@ public class Room {
     //Список раундов
     private final List<Round> rounds;
     private Round currentRound;
-
-    public boolean isFull() {
-        return isFull;
-    }
-
     //Заполнена ли комната
     private boolean isFull = false;
-
-
     //Запущена ли уже комната для игры
     private boolean started = false;
 
@@ -59,6 +52,10 @@ public class Room {
     public Room(){
         id = count++;
         rounds = new ArrayList<>();
+    }
+
+    public boolean isFull() {
+        return isFull;
     }
 
     public void startNewRound(Question question){
@@ -106,6 +103,8 @@ public class Room {
         }
         return createWaitingMessage();
     }
+
+
     public UserResponseMessage sendUserAnswerMessage(UserReceiveMessage message) {
         PlayerActionType playerActionType = message.getPlayerActionType();
         if(playerActionType == PlayerActionType.ANSWER_CHAR) {
@@ -148,6 +147,7 @@ public class Room {
         }
         return null;
     }
+
     public void deleteUser(String username){
         User user = userList.stream().filter(user1 -> user1.getLogin().equals(username)).findFirst().orElse(null);
         if(user == null) return;
@@ -158,14 +158,8 @@ public class Room {
     }
 
     public UserResponseMessage createStartMessage() {
-        UserResponseMessage responseMessage = new UserResponseMessage();
+        UserResponseMessage responseMessage = createDefaultMessage();
         started = true;
-        responseMessage.setRoomId(id);
-        BoardStatus boardStatus = new BoardStatus();
-        boardStatus.setBoard(currentRound.getBoard().getCurrentBoard());
-        boardStatus.setUsedChars(currentRound.getBoard().getUsedChars());
-        responseMessage.setBoard(boardStatus);
-        responseMessage.setQuestion(currentRound.getQuestion().getQuestion());
         responseMessage.setWantedAction(PlayerActionType.ROLL);
         responseMessage.setGameMessageType(GameMessageType.NEW_ROUND);
         responseMessage.setCurrentPlayer(currentRound.getCurrentPlayer());
@@ -181,22 +175,15 @@ public class Room {
     }
 
     public UserResponseMessage createFinishMessage(PlayerActionType previousAction) {
-        UserResponseMessage responseMessage = new UserResponseMessage();
+        UserResponseMessage responseMessage = createDefaultMessage();
         responseMessage.setGameMessageType(GameMessageType.FINISH);
         responseMessage.setPreviousAction(previousAction);
-        responseMessage.setRoomId(id);
         responseMessage.setCurrentPlayer(currentRound.getCurrentPlayer());
-        BoardStatus boardStatus = new BoardStatus();
-        boardStatus.setBoard(currentRound.getBoard().getCurrentBoard());
-        boardStatus.setUsedChars(currentRound.getBoard().getUsedChars());
-        responseMessage.setCurrentDrumPosition(currentRound.getCurrentDrumPosition());
-        responseMessage.setBoard(boardStatus);
-        responseMessage.setPlayerList(currentRound.getPlayerList());
         return responseMessage;
     }
 
     public UserResponseMessage createPlayerAnswerMessage(PlayerActionType actionType) {
-        UserResponseMessage responseMessage = new UserResponseMessage();
+        UserResponseMessage responseMessage = createDefaultMessage();
         if(actionType == PlayerActionType.ANSWER_CHAR || actionType == PlayerActionType.ANSWER_INDEX){
             responseMessage.setPreviousAction(PlayerActionType.ROLL);
         }
@@ -205,34 +192,19 @@ public class Room {
 
         }
         responseMessage.setGameMessageType(GameMessageType.PLAYER_STEP);;
-        responseMessage.setRoomId(id);
-        BoardStatus boardStatus = new BoardStatus();
-        boardStatus.setBoard(currentRound.getBoard().getCurrentBoard());
-        boardStatus.setUsedChars(currentRound.getBoard().getUsedChars());
-        responseMessage.setBoard(boardStatus);
         responseMessage.setWantedAction(actionType);
-        responseMessage.setCurrentDrumPosition(currentRound.getCurrentDrumPosition());
         responseMessage.setCurrentPlayer(currentRound.getCurrentPlayer());
-        responseMessage.setPlayerList(currentRound.getPlayerList());
         return responseMessage;
     }
 
     public UserResponseMessage createNextPlayerMessage(PlayerActionType previousAction, String answer) {
-        UserResponseMessage responseMessage = new UserResponseMessage();
+        UserResponseMessage responseMessage = createDefaultMessage();
         responseMessage.setPreviousPlayer(currentRound.getCurrentPlayer());
         currentRound.nextPlayer();
-        responseMessage.setRoomId(id);
         responseMessage.setLastAnswer(answer);
         responseMessage.setCurrentPlayer(currentRound.getCurrentPlayer());
         responseMessage.setPreviousAction(previousAction);
-        BoardStatus boardStatus = new BoardStatus();
-        boardStatus.setBoard(currentRound.getBoard().getCurrentBoard());
-        boardStatus.setUsedChars(currentRound.getBoard().getUsedChars());
-        responseMessage.setCurrentDrumPosition(currentRound.getCurrentDrumPosition());
-        responseMessage.setBoard(boardStatus);
         responseMessage.setGameMessageType(GameMessageType.NEXT_STEP);
-        responseMessage.setMutedPlayers(currentRound.getMutedPlayers());
-        responseMessage.setPlayerList(currentRound.getPlayerList());
         return responseMessage;
     }
 
@@ -248,13 +220,18 @@ public class Room {
         return responseMessage;
     }
 
-//    public UserResponseMessage createDefaultMessage() {
-//        UserResponseMessage responseMessage = new UserResponseMessage();
-//        return  responseMessage;
-//    }
-
-
-
-
+    public UserResponseMessage createDefaultMessage() {
+        UserResponseMessage responseMessage = new UserResponseMessage();
+        responseMessage.setQuestion(currentRound.getQuestion().getQuestion());
+        responseMessage.setRoomId(id);
+        BoardStatus boardStatus = new BoardStatus();
+        boardStatus.setBoard(currentRound.getBoard().getCurrentBoard());
+        boardStatus.setUsedChars(currentRound.getBoard().getUsedChars());
+        responseMessage.setCurrentDrumPosition(currentRound.getCurrentDrumPosition());
+        responseMessage.setBoard(boardStatus);
+        responseMessage.setMutedPlayers(currentRound.getMutedPlayers());
+        responseMessage.setPlayerList(currentRound.getPlayerList());
+        return  responseMessage;
+    }
 
 }

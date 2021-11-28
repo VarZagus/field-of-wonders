@@ -55,10 +55,6 @@ public class Round {
        return currentDrumPosition;
     }
 
-    public void mutePlayer(Player player) {
-        mutedPlayers.add(playerList.indexOf(player));
-
-    }
 
     public void deleteByUser(User user) {
         Player player = playerList.stream().filter(p -> p.getUser() == user).findFirst().orElse(null);

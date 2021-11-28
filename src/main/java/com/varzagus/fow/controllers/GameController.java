@@ -99,6 +99,9 @@ public class GameController {
                     room.startNewRound(questionService.getRandomQuestion());
                     messagingTemplate.convertAndSend("/game/room/" + roomId, room.createStartMessage());
                 }
+                if(responseMessage.getGameMessageType() == GameMessageType.LEAVE){
+                    rooms.remove(room);
+                }
             }
         }
     }

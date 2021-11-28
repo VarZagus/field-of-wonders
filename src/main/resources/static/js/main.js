@@ -202,7 +202,7 @@ function onMessageReceived(payload) {
         waitingPage.classList.add('hidden');
         connectingElement.classList.add('hidden');
         gamePage.classList.remove('hidden');
-        drumPosition = 'PLUS';
+        drumPosition = 'NONE';
         drumElement.innerHTML = drumPosition;
         board = lastMessage.board;
         playerList = lastMessage.playerList;
