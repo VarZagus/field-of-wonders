@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.stream.Collectors;
+
 
 @Controller
 @RequestMapping("/admin")
@@ -32,7 +34,7 @@ public class AdminController {
 
     @GetMapping("/users")
     public String userList(Model model){
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userRepository.findAll().stream().filter(User::getActive).collect(Collectors.toList()));
         model.addAttribute("user", authService.getLoggedInUser());
         return "userList";
     }
@@ -78,7 +80,8 @@ public class AdminController {
 
     @GetMapping("/user/delete/{user}")
     public String userDelete(@PathVariable User user){
-        userRepository.delete(user);
+        user.setActive(false);
+        userRepository.save(user);
         return "redirect:/admin/users";
     }
 

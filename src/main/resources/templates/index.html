@@ -16,6 +16,8 @@
             <td th:if="${user.role.name()=='ADMIN'}"><a href="/admin/questions" class="user-login">Вопросы</a> </td>
             <td th:if="${user.role.name()=='ADMIN'}"><a href="/admin/users" class="user-login">Пользователи</a>
             </td>
+            <td><a href="/" class="user-login">Описание</a></td>
+            <td><a href="/index" class="user-login">На главную</a></td>
         <td><a href="/userinfo" class="user-login" th:text="${user.login}"></a></td>
         <td>
             <form th:action="@{/logout}" method="post">
@@ -27,7 +29,7 @@
 </div>
 <div id="username-page">
     <div class="username-page-container">
-        <h1 class="title">Нажмите кнопку, чтобы начать поиск игры!</h1>
+        <h1 class="title">Нажмите кнопку, чтобы начать подбор игроков!</h1>
         <form id="usernameForm" name="usernameForm">
             <div class="form-group hidden">
                 <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" th:value="${user.login}"/>
@@ -35,12 +37,15 @@
             <div class="form-group">
                 <button type="submit" class="accent username-submit">Начать</button>
             </div>
+            <h3>Количество пользователей онлайн: <span th:text="${userCount}"></span></h3>
         </form>
     </div>
 </div>
 <div id="waiting-page" class="hidden">
     <div class="username-page-container">
         <h1 class="title">Ожидание других игроков...</h1>
+        <span>Текущее количество игроков в очереди:</span>
+        <span id="playerCount"></span>
     </div>
 </div>
 <div id="game-page" class="hidden">
@@ -50,6 +55,7 @@
         </div>
         <div class="connecting">
             Ожидание других игроков...
+
         </div>
         <form id="gameForm" name="gameForm">
             <div class="form-group">
@@ -71,7 +77,7 @@
                 </div>
                 <div class="board-class">
                     <span>Текущее состояние доски:</span>
-                    <span id="board"></span>
+                    <span id="board" style="font-weight: bold; font-size: 30px"></span>
                 </div>
                 <div class="used-chars">
                     <span>Использованные буквы:</span>

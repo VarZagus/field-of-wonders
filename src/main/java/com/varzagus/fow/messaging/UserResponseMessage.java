@@ -23,6 +23,15 @@ public class UserResponseMessage {
     private String lastAnswer;
     private Player previousPlayer;
     private String question;
+    private Integer count;
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 
     public String getQuestion() {
         return question;

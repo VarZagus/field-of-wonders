@@ -108,6 +108,9 @@ button.accent {
 #username-page {
     text-align: center;
 }
+#description-page {
+    overflow:auto;
+}
 #user-page {
     text-align: right;
     width: 100%;
@@ -117,6 +120,7 @@ button.accent {
     background: #128ff2;
 }
 .username-page-container {
+    overflow:auto;
     background: #fff;
     box-shadow: 0 1px 11px rgba(0, 0, 0, 0.27);
     border-radius: 2px;
@@ -128,6 +132,7 @@ button.accent {
     position: relative;
     padding: 35px 55px 35px;
     min-height: 250px;
+    max-height: 600px;
     position: absolute;
     top: 50%;
     left: 0;
@@ -269,6 +274,7 @@ button.accent {
         margin-left: 15px;
         margin-right: 15px;
         padding: 25px;
+        overflow: auto;
     }
     #game-page ul {
         height: calc(100% - 120px);

@@ -21,6 +21,7 @@ var currentPlayerElement = document.querySelector('#current-player');
 var questionElement = document.querySelector('#question');
 var usedCharsElement = document.querySelector("#used-chars");
 var rollButton = document.querySelector('#roll-button');
+var playerCount = document.querySelector('#playerCount');
 var stompClient = null;
 var username = null;
 var roomId = null;
@@ -187,9 +188,13 @@ function onMessageReceived(payload) {
     lastMessage = JSON.parse(payload.body);
     getAllParamsFromMessage(lastMessage);
     gameMessageType = lastMessage.gameMessageType;
+
     if(gameMessageType === "LEAVE") {
         alert("Игра окончена, так как игрок " + currentPlayer + " вышел из игры!");
         window.location.reload();
+    }
+    if(gameMessageType === 'WAITING') {
+        playerCount.innerHTML=lastMessage.count;
     }
     if(lastMessage.gameMessageType === 'NEW_ROUND') {
         alert("НАЧАЛО НОВОГО РАУНДА!")
@@ -220,7 +225,7 @@ function onMessageReceived(payload) {
             stepPlayerElement.innerHTML='Ожидание хода: ' + currentPlayer;
         }
     }
-    if(lastMessage.gameMessageType === 'WAITING') {
+    if(lastMessage.gameMessageType === 'WAITING' && !isSubscribed) {
         roomId = lastMessage.roomId;
         stompClient.subscribe('/game/room/' + lastMessage.roomId, onMessageReceived);
         isSubscribed = true;

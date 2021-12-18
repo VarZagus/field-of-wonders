@@ -14,6 +14,8 @@
             <td th:if="${user.role.name()=='ADMIN'}"><a href="/admin/questions" class="user-login">Вопросы</a> </td>
             <td th:if="${user.role.name()=='ADMIN'}"><a href="/admin/users" class="user-login">Пользователи</a>
             </td>
+            <td><a href="/" class="user-login">Описание</a></td>
+            <td><a href="/index" class="user-login">На главную</a></td>
             <td><a href="/userinfo" class="user-login" th:text="${user.login}"></a></td>
             <td>
                 <form th:action="@{/logout}" method="post">

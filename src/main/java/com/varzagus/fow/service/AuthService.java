@@ -18,4 +18,6 @@ public class AuthService {
         String login = auth.getName();
         return userRepository.findByLogin(login);
     }
+
+
 }

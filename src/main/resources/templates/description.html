@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" charset="UTF-8">
+    <title>Описание</title>
+    <link rel="stylesheet" href="/css/main.css" />
+</head>
+<body>
+<div id="user-page">
+    <table id="user-table">
+        <tr th:if="${user != null}">
+            <td th:if="${user.role.name()=='ADMIN'}"><a href="/admin/questions" class="user-login">Вопросы</a> </td>
+            <td th:if="${user.role.name()=='ADMIN'}"><a href="/admin/users" class="user-login">Пользователи</a></td>
+            <td><a href="/" class="user-login">Описание</a></td>
+            <td><a href="/index" class="user-login">На главную</a></td>
+            <td><a href="/userinfo" class="user-login" th:text="${user.login}"></a></td>
+            <td>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" value="Зарегистрироваться" class="accent username-submit">Выйти</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${user == null}">
+            <td><a href="/" class="user-login">Описание</a></td>
+            <td><a href="/index" class="user-login">На главную</a></td>
+            <td><a href="/login" class="user-login">Войти</a></td>
+        </tr>
+    </table>
+</div>
+<div id="description-page">
+    <div class="username-page-container">
+        <h1 class="title" style="text-align: center">Описание и правила игры</h1>
+        <h2>Описание сайта</h2>
+        <div class="description">
+        <span style="text-align: left">Данный сайт посвящён игре по типу "Поле Чудес". Здесь вы можете посоревноваться в своих знаниях
+        с другими игроками и приятно провести время.<br>
+        Направленность вопрсов: Техническая<br>
+        Общее количество вопросов в базе данных:
+            <span th:text="${count}"></span>
+        </span>
+
+        <h2>Правила игры</h2>
+        <div>
+            Игра начинается с того, что игрокам объявляется вопрос, на который они должны дать ответ.<br/>
+            Ответ скрыт за звёздочками на табло. Под каждой звёздочкой содержится одна буква, поэтому игроки знают
+            длину слова (как при разгадывании кроссворда). Участники игры поочередно вращают барабан и называют буквы.
+            Если названная буква имеется в загаданном слове, ее открывают на табло, и игрок получает право сделать следующий ход
+            или сразу назвать слово. В случае неверно названной буквы ход переходит к следующему игроку. Если участник угадал слово,
+            то он становится победителем. Если слово названо неверно, то игрок покидает игру, а право
+            хода переходит к следующему участнику.<br>
+
+            Основная задача игрока — угадать слово раньше соперников и при этом заработать как можно больше очков.
+            Каждый сектор на барабане соответствует определенному количеству очков. Есть также специальные сектора:<br>
+            Сектор «Плюс» – участник может открыть любую букву в слове.<br>
+            Секторы-множители — все очки игрока умножаются на соотвесттвующее число<br>
+            Секторы-сумматоры - все очки игрока складываются с соответствующим числом<br>
+            Сектор «0» — переход хода к следующему игроку<br>
+            Сектор «Банкрот» — все очки участника сгорают, а ход переходит к следующему игроку.<br>
+        </div>
+
+
+        <div style="text-align: center;font-weight: bold"><a style="text-align: center" th:if="${user == null}" href="/registration">Присоединиться к игре!</a></div>
+    </div>
+    </div>
+</div>
+</body>
+</html>
